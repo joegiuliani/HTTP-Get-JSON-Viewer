@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+    <title>HTTP GET JSON Viewer</title>
+</head>
+<body>
+    <script>
+        function setPreview(str)
+        {
+            document.getElementById("response-json").textContent = str;
+        }
+        function sendReq()
+        {
+            const url = document.getElementById("preview").textContent;
+            fetch(url, {method:'GET'}).then((result) => 
+            {
+                return result.json();
+            }).then((data) =>
+            {
+                setPreview(`===RESPONSE===\n\n\n`+JSON.stringify(data, null, 3));
+            }).catch((error) =>
+            {
+                setPreview(`===REQUEST FAILED===`);
+            });
+        }
+        function onTextInputChange()
+        {
+            const get_url = document.getElementById("get-url").value;
+            const url_suffix = document.getElementById("url_suffix").value;
+            document.getElementById("preview").textContent = get_url + url_suffix;
+        }
+    </script>
+    Get URL:<br><textarea id="get-url" oninput=onTextInputChange() value="http://localhost:8989/api/v1/">http://localhost:8989/api/v1/</textarea><br><br>
+    URL Suffix (Optional):<br><textarea id="url_suffix" oninput=onTextInputChange() value="documents">documents</textarea><br>
+    <pre id="preview">http://localhost:8989/api/v1/documents</pre>
+    <button onclick=sendReq()>Send Request</button>
+    <pre id="response-json"></pre>
+    </script>
+</body>
